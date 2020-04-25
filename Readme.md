@@ -22,8 +22,8 @@ $password = '*********';
 $client = new MagfaApiClient($domain, $username, $password);
 
 $message = (new EnqueueVO())
-    ->setTo('989128049107')
-    ->setFrom('98300079416')
+    ->setTo('9891280***')
+    ->setFrom('983000***')
     ->setMessage('سلام آقا')
     ->setMClass(1);
 
