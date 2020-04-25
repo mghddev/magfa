@@ -1,0 +1,19 @@
+{
+  "name": "mghddev/magfa_sms",
+  "type": "library",
+  "description": "library for magfa",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mohammad Ghaderi",
+      "email": "mghddev@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": { "mghddev\\magfa\\": "src/" }
+  },
+  "minimum-stability": "stable",
+  "require": {
+    "ext-soap": "*"
+  }
+}
