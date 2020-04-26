@@ -7,6 +7,6 @@ interface iMagfaApiClient
 {
     public function send(array $message);
 
-    public function getStatus(int $message_id);
+    public function getStatus(array $message_id);
 
 }

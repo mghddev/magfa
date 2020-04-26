@@ -146,18 +146,26 @@ class MagfaApiClient implements iMagfaApiClient
     }
 
     /**
-     * @param int $message_id
+     * @param array $message_ids
      * @return mixed
      * @throws APIResponseException
      * @throws ApiResponseConnectException
      */
-    public function getStatus(int $message_id)
+    public function getStatus(array $message_ids)
     {
         $data = [
-            'messageId' => $message_id
+            'messageId' => $message_ids
         ];
 
-        return $this->getSoapClient()->__soapCall("getMessageStatus", $data);
+        $result = $this->getSoapClient()->__soapCall("getMessageStatus", $data);
+
+        $response = [];
+
+        foreach ($result as $key => $item) {
+            $response[$message_ids[$key]] = $item;
+        }
+
+        return $response;
     }
 
     /**

@@ -29,4 +29,4 @@ $message = (new EnqueueVO())
 
 $result = $client->send([$message]);
 
-$status = $client->getStatus($result[0]);
+$status = $client->getStatus([$result[0]]);
