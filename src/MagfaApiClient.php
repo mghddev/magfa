@@ -157,7 +157,7 @@ class MagfaApiClient implements iMagfaApiClient
             'messageId' => $message_ids
         ];
 
-        $result = $this->getSoapClient()->__soapCall("getMessageStatus", $data);
+        $result = $this->getSoapClient()->__soapCall("getRealMessageStatuses", $data);
 
         $response = [];
 
