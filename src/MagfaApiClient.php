@@ -1,13 +1,12 @@
 <?php
 namespace mghddev\magfa;
 
-use mghddev\magfa\Constant\MagfaServices;
+use Exception;
 use mghddev\magfa\Exception\ApiResponseConnectException;
 use mghddev\magfa\Exception\APIResponseException;
 use mghddev\magfa\ValueObject\EnqueueVO;
 use SoapClient;
 use SoapFault;
-use SoapHeader;
 
 /**
  * Class MagfaApiClient
@@ -18,7 +17,10 @@ class MagfaApiClient implements iMagfaApiClient
     /**
      * @var array
      */
-    protected array $default_config = ['base_uri' => 'http://sms.magfa.com/services/urn:SOAPSmsQueue?wsdl'];
+    protected array $default_config = [
+        'base_uri' => 'http://sms.magfa.com/services/urn:SOAPSmsQueue?wsdl',
+        'timeout' => 10,
+    ];
 
     /**
      * @var string
@@ -41,6 +43,11 @@ class MagfaApiClient implements iMagfaApiClient
     protected string $base_uri;
 
     /**
+     * @var int|mixed
+     */
+    protected int $timeout;
+
+    /**
      * @var SoapClient|null
      */
     protected ?SoapClient $soap_client = null;
@@ -55,6 +62,7 @@ class MagfaApiClient implements iMagfaApiClient
     public function __construct(string $domain, string $username, string $password, array $config = [])
     {
         $this->base_uri = $config['base_uri'] ?? $this->default_config['base_uri'];
+        $this->timeout = $config['timeout'] ?? $this->default_config['timeout'];
         $this->username = $username;
         $this->password = $password;
         $this->domain = $domain;
@@ -72,7 +80,7 @@ class MagfaApiClient implements iMagfaApiClient
         }
 
         try{
-            $this->soap_client = new SoapClient(
+            $this->soap_client = new SoapClientTimeout(
                 $this->base_uri,
                 [
                     'login' => $this->username,'password' => $this->password, // Credientials
@@ -81,10 +89,10 @@ class MagfaApiClient implements iMagfaApiClient
                 ]
             );
 
-            return $this->soap_client;
+            return $this->soap_client->__setTimeout($this->timeout);
         }
 
-        catch (\Exception $e) {
+        catch (Exception $e) {
 
             if (
                 get_class($e) == SoapFault::class &&

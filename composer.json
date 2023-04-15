@@ -14,6 +14,7 @@
   },
   "minimum-stability": "stable",
   "require": {
-    "ext-soap": "*"
+    "ext-soap": "*",
+    "ext-curl": "*"
   }
 }
