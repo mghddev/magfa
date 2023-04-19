@@ -79,17 +79,24 @@ class MagfaApiClient implements iMagfaApiClient
             return $this->soap_client;
         }
 
+        $context = stream_context_create([
+            'http' => [
+                'timeout' => $this->timeout
+            ]
+        ]);
+
         try{
-            $this->soap_client = new SoapClientTimeout(
+            $this->soap_client = new SoapClient(
                 $this->base_uri,
                 [
                     'login' => $this->username,'password' => $this->password, // Credientials
                     'features' => SOAP_USE_XSI_ARRAY_TYPE, // Required
 //                    'trace' => true // Optional (debug)
+                    'stream_context' => $context,
                 ]
             );
 
-            return $this->soap_client->__setTimeout($this->timeout);
+            return $this->soap_client;
         }
 
         catch (Exception $e) {
@@ -181,10 +188,8 @@ class MagfaApiClient implements iMagfaApiClient
      * @param string $contain
      * @return bool
      */
-    private function strContains(string $string, string $contain)
+    private function strContains(string $string, string $contain): bool
     {
-        if (strpos($string, $contain) !== false) {
-            return true;
-        }
+        return strpos($string, $contain) !== false;
     }
 }
